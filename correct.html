@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>香港公務員 CRE 中文運用｜全真題庫與學習工作台</title>
+<style>
+  :root{
+    --navy:#0b2545; --navy2:#13315c; --red:#c1121f; --red2:#e5383b;
+    --gold:#e0a458; --bg:#f4f6fb; --card:#ffffff; --ink:#1b2733;
+    --muted:#5b6b7b; --line:#dbe3ee; --ok:#2a9d4a; --bad:#c1121f;
+    --hi:#e5383b; --midhi:#e8743b; --mid:#e0a458; --lo:#3a9d6e;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px;}
+  header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:18px 22px;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+  header h1{margin:0;font-size:20px;letter-spacing:.5px}
+  header p{margin:4px 0 0;font-size:13px;color:#c9d6ea}
+  .wrap{max-width:980px;margin:0 auto;padding:16px}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+  .tab{flex:1;min-width:150px;cursor:pointer;border:1px solid var(--line);background:var(--card);
+    border-radius:10px;padding:12px 14px;font-weight:600;color:var(--muted);transition:.15s;text-align:center}
+  .tab small{display:block;font-weight:400;font-size:11px;margin-top:3px;opacity:.8}
+  .tab.active{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:0 4px 12px rgba(11,37,69,.25)}
+  .panel{display:none}
+  .panel.active{display:block}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+  .badge{display:inline-block;font-size:12px;padding:3px 9px;border-radius:20px;font-weight:600;margin-right:6px}
+  .b-year{background:#e7eefb;color:var(--navy)}
+  .b-type{background:#fdeef0;color:var(--red)}
+  .b-prob{color:#fff}
+  .p-hi{background:var(--hi)} .p-midhi{background:var(--midhi)} .p-mid{background:var(--mid)} .p-lo{background:var(--lo)}
+  .stem{font-size:16px;font-weight:600;margin:12px 0}
+  .passage{background:#f8fafc;border-left:4px solid var(--gold);padding:10px 14px;border-radius:0 8px 8px 0;margin:10px 0;color:#33414f;font-size:14px}
+  .opts{display:grid;gap:8px;margin:12px 0}
+  .opt{border:1px solid var(--line);border-radius:9px;padding:10px 13px;cursor:pointer;transition:.12s;display:flex;gap:10px;align-items:flex-start}
+  .opt:hover{background:#f0f5ff;border-color:#9bb6e0}
+  .opt .k{font-weight:700;color:var(--navy);min-width:18px}
+  .opt.lock{pointer-events:none}
+  .opt.right{background:#e7f7ec;border-color:var(--ok);color:#1d6b34}
+  .opt.wrong{background:#fdeaec;border-color:var(--bad);color:#9c1220}
+  .opt.chosen{outline:2px solid var(--navy)}
+  .feedback{margin-top:12px;padding:12px 14px;border-radius:10px;font-size:14px}
+  .fb-ok{background:#e7f7ec;border:1px solid var(--ok);color:#1d6b34}
+  .fb-bad{background:#fdeaec;border:1px solid var(--bad);color:#9c1220}
+  .analysis{border-top:1px dashed var(--line);margin-top:12px;padding-top:10px}
+  .analysis h4{margin:6px 0;font-size:14px;color:var(--navy)}
+  .analysis .row{margin:6px 0;padding:6px 10px;border-radius:7px;font-size:13.5px}
+  .row.r{background:#e7f7ec}
+  .row.w{background:#fdeaec}
+  .sys{background:#fff7e6;border:1px dashed var(--gold);color:#8a5a00;padding:8px 12px;border-radius:8px;margin-top:10px;font-size:13px}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  select,input[type=text],button{font-family:inherit;font-size:14px}
+  select{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff}
+  input[type=text]{padding:8px 12px;border:1px solid var(--line);border-radius:8px;flex:1;min-width:180px}
+  button.act{background:var(--navy);color:#fff;border:none;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:600}
+  button.act:hover{background:var(--navy2)}
+  button.ghost{background:#fff;border:1px solid var(--line);padding:9px 16px;border-radius:8px;cursor:pointer}
+  button.ghost:hover{background:#f0f5ff}
+  .stat{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+  .stat .box{flex:1;min-width:120px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center}
+  .stat .num{font-size:22px;font-weight:800;color:var(--navy)}
+  .stat .lab{font-size:12px;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+  th{background:var(--navy);color:#fff}
+  tr:nth-child(even) td{background:#fafcff}
+  .qmeta{font-size:12px;color:var(--muted);margin-top:6px}
+  .hint{font-size:12.5px;color:var(--muted);background:#eef3fb;padding:8px 12px;border-radius:8px;margin-bottom:10px}
+  .empty{text-align:center;color:var(--muted);padding:30px}
+  .mark{color:var(--red);font-weight:700}
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
+  .pulse{animation:p 1.2s infinite} @keyframes p{0%,100%{opacity:1}50%{opacity:.4}}
+  a{color:var(--red)}
+</style>
+</head>
+<body>
+<header>
+  <h1>香港公務員 CRE 中文運用 · 全真題庫與學習工作台</h1>
+  <p>歷年真題（2012–2025）精華 + 2026 趨勢預測題 ｜ 五大核心題型 ｜ 模擬答題 · 錯題自動歸檔 · 錯題重溫</p>
+</header>
+
+<div class="wrap">
+  <div class="tabs">
+    <div class="tab active" data-col="1">📚 Column 1｜歷年真題與全題型庫<small>瀏覽／按年份篩選</small></div>
+    <div class="tab" data-col="2">🎯 Column 2｜模擬試題<small>逐題作答 · 即時解析</small></div>
+    <div class="tab" data-col="3">🔁 Column 3｜錯題重溫<small>二次強化 · 思維陷阱檢視</small></div>
+  </div>
+
+  <!-- ===================== COLUMN 1 ===================== -->
+  <div class="panel active" id="col1">
+    <div class="card">
+      <div class="hint">指令：輸入 <b>歷年真題 2021</b> 可直達該年份代表性考題；亦可下方下拉篩選。題目標注「真題改編」為依歷年 CRE 中文運用題型與考點重製，「2026年預測題」為趨勢模擬。</div>
+      <div class="toolbar">
+        <input type="text" id="cmdInput" placeholder="例如：歷年真題 2021">
+        <button class="act" onclick="runCommand()">執行指令</button>
+        <select id="yearSel" onchange="filterYear(this.value)"></select>
+        <select id="typeSel" onchange="filterType(this.value)"></select>
+        <button class="ghost" onclick="resetFilter()">重置</button>
+      </div>
+      <div id="dbInfo" class="qmeta"></div>
+      <div id="dbList"></div>
+      <details style="margin-top:12px">
+        <summary style="cursor:pointer;color:var(--navy);font-weight:600">展開｜全題型總覽表（含年份／考點／2026重考機率）</summary>
+        <div style="overflow:auto;margin-top:10px"><table id="overviewTbl"></table></div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ===================== COLUMN 2 ===================== -->
+  <div class="panel" id="col2">
+    <div class="stat">
+      <div class="box"><div class="num" id="sDone">0</div><div class="lab">已作答</div></div>
+      <div class="box"><div class="num" id="sRight">0</div><div class="lab">答對</div></div>
+      <div class="box"><div class="num" id="sRate">—</div><div class="lab">正確率</div></div>
+      <div class="box"><div class="num" id="sWrong">0</div><div class="lab">錯題數</div></div>
+    </div>
+    <div class="card" id="mockCard">
+      <div id="mockHead"></div>
+      <div class="stem" id="mockStem"></div>
+      <div class="passage" id="mockPassage" style="display:none"></div>
+      <div class="opts" id="mockOpts"></div>
+      <div id="mockFeedback"></div>
+      <div class="toolbar" style="margin-top:14px">
+        <button class="act" id="nextBtn" style="display:none" onclick="nextMock()">下一題 ▶</button>
+        <button class="ghost" onclick="switchCol(3)">前往錯題重溫</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== COLUMN 3 ===================== -->
+  <div class="panel" id="col3">
+    <div class="card">
+      <div class="hint" id="reviewHint">進入錯題重溫：系統將提取你在 Column 2 答錯的題目重新出題，不顯示過往答案，作答後進行二次對比解析，檢視是否已修正思維陷阱。</div>
+      <div id="reviewBox"></div>
+      <div class="toolbar" id="reviewTools" style="display:none">
+        <button class="act" onclick="nextReview()">下一題 ▶</button>
+        <button class="ghost" onclick="clearWrong()">清空錯題本</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>本工作台題庫為依 CRE 中文運用（香港公務員綜合招聘考試）題型與考點重製之模擬題，供備考練習參考。</footer>
+</div>
+
+<script>
+/* ============ 題庫 BANK ============ */
+const TYPES = {1:"閱讀理解",2:"語病糾錯",3:"字詞與成語辨析",4:"句式替換與修飾",5:"中文公文常識與措辭"};
+const PROBCLS = {"高":"p-hi","中高":"p-midhi","中":"p-mid","偏低":"p-lo"};
+
+const BANK = [
+ /* ---- 語病糾錯 ---- */
+ {id:1,year:2019,source:"2019年真題改編",type:2,prob:"高",
+  stem:"下列句子沒有語病的一項是：",
+  options:[{k:"A",t:"通過這次培訓，使我們掌握了新的工作方法。"},
+           {k:"B",t:"這部電影的內容和表現手法都很有新意。"},
+           {k:"C",t:"我們要發揮優點，克服自身的種種缺點。"},
+           {k:"D",t:"他的話語剛落，大家都忍俊不禁地笑起來。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。主謂賓完整，『內容和表現手法』與『有新意』搭配恰當，無成分殘缺、搭配不當等問題。",
+   A:"『通過……使……』套用使句子缺主語（介詞結構淹沒主語），應刪『通過』或『使』。",
+   C:"『發揮』與『優點』搭配不當，宜用『發揚優點』；前半句已含語病。",
+   D:"『忍俊不禁』本身已含『忍不住笑』之意，再加『地笑起來』語意贅餘。"}},
+
+ {id:2,year:2013,source:"2013年真題改編",type:2,prob:"中高",
+  stem:"下列句子沒有語病的一項是：",
+  options:[{k:"A",t:"由於他長期堅持鍛煉，因此他的身體很健康。"},
+           {k:"B",t:"這篇文章的結構和內容都很豐富。"},
+           {k:"C",t:"我們必須認真克服並隨時發現工作中的缺點。"},
+           {k:"D",t:"香港故宮文化博物館的落成，為市民提供了新的文化休閒空間。"}],
+  answer:"D",
+  analysis:{
+   D:"正確。主謂賓完整，『落成』與『提供空間』邏輯通順，無語病。",
+   A:"『由於……因此……』因果連詞略顯贅疊，口語常見但較規範寫法宜擇一；本題以往年評卷多視為小疵，相較下非最優。",
+   B:"搭配不當——『結構』不能與『豐富』搭配，可改『結構嚴謹、內容豐富』。",
+   C:"語序不當——應先『發現』再『克服』，邏輯順序顛倒。"}},
+
+ {id:3,year:2015,source:"2015年真題改編",type:2,prob:"高",
+  stem:"下列句子中，有語病的一項是：",
+  options:[{k:"A",t:"政府致力於改善民生，成效有目共睹。"},
+           {k:"B",t:"這項政策能否落實，關鍵在於各部門的積極配合。"},
+           {k:"C",t:"公務員應秉持公正、廉潔的服務精神。"},
+           {k:"D",t:"會議將於下週一上午舉行，請準時出席。"}],
+  answer:"B",
+  analysis:{
+   B:"有語病。『能否』為兩面（能／否），後句『關鍵在於……積極配合』只說了一面，兩面對一面，前後不照應；應改『關鍵在於各部門是否積極配合』。",
+   A:"陳述通順，無語病。",
+   C:"『秉持……精神』搭配恰當，無語病。",
+   D:"時間、事項、要求清楚，無語病。"}},
+
+ {id:4,year:2018,source:"2018年真題改編",type:2,prob:"中高",
+  stem:"下列句子沒有語病的一項是：",
+  options:[{k:"A",t:"為了防止此類事故不再發生，我們加強了安全管理。"},
+           {k:"B",t:"他的建議不但得到了採納，而且獲得了表揚。"},
+           {k:"C",t:"這本書對我國年輕一代的成長起了很大的影響。"},
+           {k:"D",t:"經過反覆討論，最後終於得出了一致。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。『不但……而且……』遞進合理，主謂完整，無語病。",
+   A:"雙重否定誤用——『防止……不再發生』即『希望發生』，與原意相反，應改『再次發生』。",
+   C:"搭配不當——『起了……影響』宜作『產生……影響』或『起了……作用』。",
+   D:"成分殘缺——『得出』缺賓語，應補『得出了一致的結論』。"}},
+
+ {id:5,year:2020,source:"2020年真題改編",type:2,prob:"高",
+  stem:"下列句子有語病的是：",
+  options:[{k:"A",t:"這項措施的出台，深受廣大市民所歡迎。"},
+           {k:"B",t:"公務員須具備良好的溝通與協調能力。"},
+           {k:"C",t:"政府將持續優化公共服務，提升市民的獲得感。"},
+           {k:"D",t:"資料顯示，本港失業率較上月略有下降。"}],
+  answer:"A",
+  analysis:{
+   A:"有語病。『深受……所歡迎』句式雜糅，應擇一：『深受廣大市民歡迎』或『為廣大市民所歡迎』。",
+   B:"『具備……能力』搭配正確，無語病。",
+   C:"『優化服務、提升獲得感』通順，無語病。",
+   D:"『失業率……下降』搭配正確，無語病。"}},
+
+ {id:6,year:2022,source:"2022年真題改編",type:2,prob:"中高",
+  stem:"下列句子沒有語病的一項是：",
+  options:[{k:"A",t:"由於天氣惡劣，導致航班出現大面積延誤。"},
+           {k:"B",t:"這部紀錄片真實地記錄了大自然的美麗與奧秘。"},
+           {k:"C",t:"他的繪畫作品贏得了觀眾的高度評價和熱烈的掌聲。"},
+           {k:"D",t:"他的話語剛落，大家都忍俊不禁地笑起來。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。主謂賓完整，『記錄……美麗與奧秘』搭配恰當。",
+   A:"成分殘缺——『由於……導致……』套用使句子缺主語，應刪其一。",
+   C:"搭配不當——『作品』可以『贏得評價』，但『贏得掌聲』通常屬表演／演出，此處主賓搭配牽強。",
+   D:"『忍俊不禁』已含『笑』意，『忍俊不禁地笑』贅餘。"}},
+
+ {id:7,year:2024,source:"2024年真題改編",type:2,prob:"高",
+  stem:"下列句子沒有語病的一項是：",
+  options:[{k:"A",t:"這項活動旨在提升市民的環保意識。"},
+           {k:"B",t:"經過專家反覆論證，終於制定了可行方案。"},
+           {k:"C",t:"他的年紀雖然不大，但是閱歷卻很淵博。"},
+           {k:"D",t:"為了確保安全，避免不出任何意外。"}],
+  answer:"A",
+  analysis:{
+   A:"正確。『旨在＋提升……意識』句式完整，無語病。",
+   B:"成分殘缺——『經過……終於制定了』缺主語，應補『專家們』或改『專家反覆論證後，終於制定……』。",
+   C:"搭配不當——『閱歷』應與『豐富』搭配，『淵博』多用於學問、知識。",
+   D:"雙重否定誤用——『避免不出意外』即『希望出意外』，應改『避免出意外』。"}},
+
+ {id:8,year:2026,source:"2026年預測題",type:2,prob:"高",
+  stem:"下列句子沒有語病的一項是：",
+  options:[{k:"A",t:"隨著科技進步，使得日常生活更加便利。"},
+           {k:"B",t:"人工智能能否惠民，取決於監管是否到位。"},
+           {k:"C",t:"他差不多大概完成了八成的工序。"},
+           {k:"D",t:"會議內容被我們們廣泛地討論。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。『能否……取決於是否……』兩面對兩面，照應嚴謹，無語病。",
+   A:"成分殘缺——『隨著……使得……』套用缺主語，應刪其一。",
+   C:"語意重複——『差不多』與『大概』同義疊用，保留其一即可。",
+   D:"贅餘——『我們們』多一『們』字，應為『我們』。"}},
+
+ /* ---- 閱讀理解 ---- */
+ {id:9,year:2014,source:"2014年真題改編",type:1,prob:"中",
+  stem:"根據下文，下列理解正確的是：",
+  passage:"香港位處南海之濱，素稱東方之珠。開埠以來，中西文化薈萃，形成獨特的城市風貌。然而城市急速發展，亦令舊區面貌漸失。如何在現代化與保育之間取得平衡，是當前規劃者的重要課題。",
+  options:[{k:"A",t:"香港的文化特色源於中西文化的交融。"},
+           {k:"B",t:"舊區面貌的改變完全出於市民的意願。"},
+           {k:"C",t:"城市發展與保育之間已達成平衡。"},
+           {k:"D",t:"規劃者無須考慮舊區保育。"}],
+  answer:"A",
+  analysis:{
+   A:"正確。文中『中西文化薈萃，形成獨特的城市風貌』說明文化特色來自中西交融。",
+   B:"無中生有——文中未提及改變出於市民意願。",
+   C:"與文意相反——文中說『如何取得平衡是重要課題』，即尚未達成。",
+   D:"與文意相反——正是要思考『現代化與保育的平衡』。"}},
+
+ {id:10,year:2016,source:"2016年真題改編",type:1,prob:"中",
+  stem:"本文主要強調：",
+  passage:"閱讀不僅能增廣見聞，更有助培養獨立思考。然而，在資訊爆炸的時代，我們更須懂得辨別真偽、去蕪存菁。與其盲目追趕潮流，不如靜下心來，細味經典。",
+  options:[{k:"A",t:"資訊爆炸令閱讀變得困難。"},
+           {k:"B",t:"閱讀經典有助培養獨立思考與辨別能力。"},
+           {k:"C",t:"潮流比經典更值得追隨。"},
+           {k:"D",t:"現代人已不再閱讀經典。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。全文圍繞『獨立思考』『辨別真偽』與『細味經典』，B 綜括主旨。",
+   A:"非重點——資訊爆炸只是背景，重點在於如何取捨。",
+   C:"與文意相反——文中主張『不如細味經典』。",
+   D:"無中生有——文中未稱現代人已不讀經典。"}},
+
+ {id:11,year:2017,source:"2017年真題改編",type:1,prob:"中高",
+  stem:"上文旨在說明：",
+  passage:"公職人員須時刻謹記，權力來自人民，須用以服務大眾。面對誘惑，應堅守原則；遇到壓力，更須不偏不倚。惟其如此，方能贏得公眾信任。",
+  options:[{k:"A",t:"公職人員應如何運用權力與堅守原則。"},
+           {k:"B",t:"公眾對政府已毫無信任。"},
+           {k:"C",t:"權力應集中於少數人手中。"},
+           {k:"D",t:"面對壓力應順從他人。"}],
+  answer:"A",
+  analysis:{
+   A:"正確。全段論述公職人員運用權力服務大眾、堅守原則以贏得信任。",
+   B:"與文意相反——文中說『方能贏得信任』，非已無信任。",
+   C:"與文意相反——權力『來自人民』，非應集中少數。",
+   D:"與文意相反——『遇到壓力更須不偏不倚』。"}},
+
+ {id:12,year:2019,source:"2019年真題改編",type:1,prob:"中",
+  stem:"根據文意，下列說法正確的是：",
+  passage:"創新並非憑空想像，而是源於對問題的細緻觀察。許多便民服務的改良，正是由前線人員發現痛點而起。因此，鼓勵基層提出意見，往往比自上而下發號施令更有效。",
+  options:[{k:"A",t:"創新主要來自上級的指示。"},
+           {k:"B",t:"觀察問題是創新的重要起點。"},
+           {k:"C",t:"基層意見無助於服務改良。"},
+           {k:"D",t:"便民服務無須任何改良。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。首句即點明『創新……源於對問題的細緻觀察』。",
+   A:"與文意相反——文中強調基層觀察勝於『自上而下發號施令』。",
+   C:"與文意相反——『鼓勵基層提出意見……更有效』。",
+   D:"無中生有——文中主張持續改良便民服務。"}},
+
+ {id:13,year:2021,source:"2021年真題改編",type:1,prob:"中",
+  stem:"上文主要指出：",
+  passage:"氣候變化影響遍及全球，沒有任何地區能獨善其身。香港作為國際都會，既受海平面上升威脅，亦可憑自身優勢參與區域減碳合作。應對之道，在於未雨綢繆，而非亡羊補牢。",
+  options:[{k:"A",t:"香港不受氣候變化影響。"},
+           {k:"B",t:"應對氣候變化須及早規劃、並開展區域協作。"},
+           {k:"C",t:"海平面上升只影響發展中地區。"},
+           {k:"D",t:"減碳合作與香港無關。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。『未雨綢繆』對應及早規劃，『參與區域減碳合作』對應區域協作。",
+   A:"與文意相反——『沒有任何地區能獨善其身』。",
+   C:"無據——文中未限定只影響發展中地區。",
+   D:"與文意相反——香港『可參與區域減碳合作』。"}},
+
+ {id:14,year:2023,source:"2023年真題改編",type:1,prob:"中高",
+  stem:"作者最想提醒的是：",
+  passage:"數碼轉型為公共服務帶來便利，卻也衍生數據安全與數碼鴻溝等隱憂。長者或不熟悉科技者，可能因未能使用網上服務而被邊緣化。推動智慧城市的同時，政府須保留適切的人手支援，方能做到普惠便民。",
+  options:[{k:"A",t:"網上服務對市民毫無用處。"},
+           {k:"B",t:"數碼轉型須兼顧弱勢，保留人手支援。"},
+           {k:"C",t:"長者應自行學會所有科技。"},
+           {k:"D",t:"智慧城市不必考慮數據安全。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。末句點題：轉型同時『須保留適切的人手支援，方能普惠便民』。",
+   A:"極端且與文意相反——文中肯定便利。",
+   C:"偏頗——重點在政府保留支援，而非苛求長者。",
+   D:"與文意相反——『衍生數據安全……隱憂』正需考慮。"}},
+
+ {id:15,year:2025,source:"2025年真題改編",type:1,prob:"中",
+  stem:"上文主旨是：",
+  passage:"良好的公共政策，既需科學論證，亦離不開民意基礎。諮詢並非形式，而是讓決策更貼近現實的過程。當政策獲得廣泛理解與認同，推行自然事半功倍。",
+  options:[{k:"A",t:"諮詢只是例行公事。"},
+           {k:"B",t:"公共政策制定應兼重論證與民意。"},
+           {k:"C",t:"民意比科學論證更重要。"},
+           {k:"D",t:"政策無須公眾認同。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。『既需科學論證，亦離不開民意基礎』即兼重二者。",
+   A:"與文意相反——『諮詢並非形式』。",
+   C:"文中並重，非『民意更重要』。",
+   D:"與文意相反——政策需『廣泛理解與認同』。"}},
+
+ {id:16,year:2026,source:"2026年預測題",type:1,prob:"中高",
+  stem:"本文觀點是：",
+  passage:"人工智能正重塑各行各業，政府服務亦不例外。智能客服可分流查詢、縮短輪候，但若缺乏人性化的例外處理機制，仍難滿足複雜個案。科技是工具，最終目的始終是以人為本。",
+  options:[{k:"A",t:"人工智能將完全取代公務員。"},
+           {k:"B",t:"運用科技須輔以人性化安排，方為便民。"},
+           {k:"C",t:"智能客服毫無價值。"},
+           {k:"D",t:"政府不應採用任何科技。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。『科技是工具……以人為本』強調科技須配人性化機制。",
+   A:"極端且與文意相反——文中強調『以人為本』，非取代。",
+   C:"與文意相反——肯定智能客服可『分流、縮短輪候』。",
+   D:"無據——文中主張善用科技。"}},
+
+ /* ---- 字詞與成語辨析 ---- */
+ {id:17,year:2012,source:"2012年真題改編",type:3,prob:"中",
+  stem:"下列四組詞語中，書寫完全正確的一組是：",
+  options:[{k:"A",t:"甘拜下風、一愁莫展、人情事故"},
+           {k:"B",t:"徇私舞弊、墨守成規、再接再厲"},
+           {k:"C",t:"穿流不息、脅肩諂笑、不徑而走"},
+           {k:"D",t:"世外桃源、金榜提名、床第之私"}],
+  answer:"B",
+  analysis:{
+   B:"正確。三詞書寫皆對：徇私舞弊、墨守成規、再接再厲。",
+   A:"『一愁莫展』應作『一籌莫展』；『人情事故』應作『人情世故』。",
+   C:"『穿流不息』應作『川流不息』；『不徑而走』應作『不脛而走』。",
+   D:"『金榜提名』應作『金榜題名』；『床第之私』應作『床笫之私』（笫音 zǐ）。"}},
+
+ {id:18,year:2017,source:"2017年真題改編",type:3,prob:"中",
+  stem:"下列句子沒有錯別字的一項是：",
+  options:[{k:"A",t:"他做事向來一絲不荀。"},
+           {k:"B",t:"這項措施可謂立杆見影。"},
+           {k:"C",t:"報告內容言簡意賅，切中肯綮。"},
+           {k:"D",t:"雙方達成共識，正式簽定協議。"}],
+  answer:"C",
+  analysis:{
+   C:"正確。『言簡意賅』『切中肯綮』書寫無誤。",
+   A:"『一絲不荀』應作『一絲不苟』。",
+   B:"『立杆見影』應作『立竿見影』。",
+   D:"『簽定』應作『簽訂』（訂立協議）。"}},
+
+ {id:19,year:2020,source:"2020年真題改編",type:3,prob:"中",
+  stem:"下列詞語中，用字正確的是：",
+  options:[{k:"A",t:"不恥下問"},
+           {k:"B",t:"既往不究"},
+           {k:"C",t:"燃煤之急"},
+           {k:"D",t:"迫不急待"}],
+  answer:"A",
+  analysis:{
+   A:"正確。『不恥下問』指向地位、學識不及自己者請教而不感羞恥，用字無誤。",
+   B:"『既往不究』應作『既往不咎』（咎：責備）。",
+   C:"應作『燃眉之急』（像火燒眉毛般緊急），非『燃煤』。",
+   D:"『迫不急待』應作『迫不及待』（及：趕上）。"}},
+
+ {id:20,year:2022,source:"2022年真題改編",type:3,prob:"中",
+  stem:"下列成語書寫正確的是：",
+  options:[{k:"A",t:"按步就班"},
+           {k:"B",t:"變本加利"},
+           {k:"C",t:"層出不窮"},
+           {k:"D",t:"默守成規"}],
+  answer:"C",
+  analysis:{
+   C:"正確。『層出不窮』指接連不斷地出現，書寫無誤。",
+   A:"『按步就班』應作『按部就班』（部：門類、次序）。",
+   B:"『變本加利』應作『變本加厲』（厲：猛烈）。",
+   D:"『默守成規』應作『墨守成規』（墨：墨子）。"}},
+
+ {id:21,year:2024,source:"2024年真題改編",type:3,prob:"中",
+  stem:"下列對「的、地、得」使用正確的一項是：",
+  options:[{k:"A",t:"他高興的跳了起來。"},
+           {k:"B",t:"這幅畫畫得很生動。"},
+           {k:"C",t:"群眾熱烈得鼓掌歡迎。"},
+           {k:"D",t:"比賽進行的很順利。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。『畫得（補語）很生動』——動詞後補語用『得』。",
+   A:"『高興』修飾動詞『跳』，狀語應用『地』：高興地跳。",
+   C:"『熱烈』修飾動詞『鼓掌』，狀語應用『地』：熱烈地鼓掌。",
+   D:"『進行』後補語『很順利』應用『得』：進行得順利。"}},
+
+ {id:22,year:2025,source:"2025年真題改編",type:3,prob:"中",
+  stem:"下列句子中，用詞無誤的一項是：",
+  options:[{k:"A",t:"這件案子撲朔迷離，尚待進一步查證。"},
+           {k:"B",t:"他做事總是粗枝大葉，一絲不荀。"},
+           {k:"C",t:"這項政策反應熱列，市民大力支持。"},
+           {k:"D",t:"兩國代表融匯貫通，終達共識。"}],
+  answer:"A",
+  analysis:{
+   A:"正確。『撲朔迷離』形容事情錯綜複雜，『查證』用字無誤。",
+   B:"『一絲不荀』應作『一絲不苟』。",
+   C:"『熱列』應作『熱烈』。",
+   D:"『融匯貫通』應作『融會貫通』。"}},
+
+ {id:23,year:2016,source:"2016年真題改編",type:3,prob:"中高",
+  stem:"下列句子中成語使用恰當的一項是：",
+  options:[{k:"A",t:"這位官員巧舌如簧，把問題解釋得一清二楚。"},
+           {k:"B",t:"新政策推行後，市民趨之若鶩地前來登記。"},
+           {k:"C",t:"面對突發疫情，前線人員處變不驚，沉著應對。"},
+           {k:"D",t:"這個方案可謂天衣無縫，百密一疏。"}],
+  answer:"C",
+  analysis:{
+   C:"正確。『處變不驚』褒義，形容從容應對突發狀況，語境恰當。",
+   A:"『巧舌如簧』為貶義（形容能言善辯、狡猾），用於褒揚語境誤用。",
+   B:"『趨之若鶩』為貶義（像鴨子般成群追逐，含盲目跟風意），不當。",
+   D:"『天衣無縫』（完美）與『百密一疏』（有疏漏）自相矛盾。"}},
+
+ {id:24,year:2023,source:"2023年真題改編",type:3,prob:"中高",
+  stem:"下列成語使用正確的是：",
+  options:[{k:"A",t:"這位歌手唱功了得，聽眾無不趨之若鶩。"},
+           {k:"B",t:"新館落成，設計美輪美奐，令人驚嘆。"},
+           {k:"C",t:"他對同事建議充耳不聞，可謂集思廣益。"},
+           {k:"D",t:"為了趕工，他處心積慮，終於如期完成。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。『美輪美奐』專形容建築物高大華美，用於新館得體。",
+   A:"『趨之若鶩』貶義，不宜形容聽眾欣賞。",
+   C:"『集思廣益』指集中眾智，與『充耳不聞』（不聽取）意義相反。",
+   D:"『處心積慮』貶義（蓄意已久），誤用於褒義『趕工完成』。"}},
+
+ {id:25,year:2025,source:"2025年真題改編",type:3,prob:"中",
+  stem:"下列成語使用恰當的是：",
+  options:[{k:"A",t:"面對批評，他虛懷若谷，欣然接受。"},
+           {k:"B",t:"這項工程浩大而艱巨，可謂舉重若輕。"},
+           {k:"C",t:"他信口開河，所言句句有據。"},
+           {k:"D",t:"兩人同心協力，真是同床異夢。"}],
+  answer:"A",
+  analysis:{
+   A:"正確。『虛懷若谷』褒義，形容度量寬大、能納諫言，語境恰當。",
+   B:"『舉重若輕』形容辦事從容不費力，不形容『工程』本身，主賓搭配不當。",
+   C:"『信口開河』貶義（隨口亂說），與『句句有據』矛盾。",
+   D:"『同床異夢』指表面一致、各懷心思，與『同心協力』相反。"}},
+
+ {id:26,year:2026,source:"2026年預測題",type:3,prob:"中高",
+  stem:"下列成語運用正確的是：",
+  options:[{k:"A",t:"人工智能發展一日千里，令人鼓舞。"},
+           {k:"B",t:"他對新政策侃侃而談，卻一問三不知。"},
+           {k:"C",t:"這問題盤根錯節，可謂雪上加霜。"},
+           {k:"D",t:"市民對措施額手稱慶，怨聲載道。"}],
+  answer:"A",
+  analysis:{
+   A:"正確。『一日千里』形容進展極快，用於科技發展得體。",
+   B:"『侃侃而談』褒義（從容暢談），與『一問三不知』語境矛盾。",
+   C:"『雪上加霜』指災難疊加，不形容『問題複雜』（應用盤根錯節本身）。",
+   D:"『額手稱慶』（高興）與『怨聲載道』（不滿）自相矛盾。"}},
+
+ {id:27,year:2019,source:"2019年真題改編",type:3,prob:"中",
+  stem:"公務員處理市民投訴，應先耐心____，再作跟進。填入最恰當的詞語：",
+  options:[{k:"A",t:"聆聽"},
+           {k:"B",t:"聽取"},
+           {k:"C",t:"傾聽"},
+           {k:"D",t:"竊聽"}],
+  answer:"A",
+  analysis:{
+   A:"正確。『聆聽』含恭敬、認真聽取之意，最貼『耐心』與服務市民的語境。",
+   B:"『聽取』為公文中性用語（聽取意見），尚可但不如『聆聽』契合『耐心』。",
+   C:"『傾聽』多接『傾聽心聲』，此處亦通，但『聆聽』更顯誠懇。",
+   D:"『竊聽』為貶義（偷聽），明顯不當。"}},
+
+ {id:28,year:2021,source:"2021年真題改編",type:3,prob:"中",
+  stem:"這份報告數據____，說服力強。填入最恰當的詞語：",
+  options:[{k:"A",t:"翔實"},
+           {k:"B",t:"詳盡"},
+           {k:"C",t:"詳細"},
+           {k:"D",t:"周全"}],
+  answer:"A",
+  analysis:{
+   A:"正確。『翔實』專指資料豐富且確實，最貼『數據……說服力強』。",
+   B:"『詳盡』側重周全細緻，未強調『確實』。",
+   C:"『詳細』側重內容細緻，未強調『確實』。",
+   D:"『周全』側重完備無缺漏，不專形容數據。"}},
+
+ /* ---- 句式替換與修飾 ---- */
+ {id:29,year:2015,source:"2015年真題改編",type:4,prob:"中高",
+  stem:"下列句子關聯詞使用正確的一項是：",
+  options:[{k:"A",t:"即使困難再大，我們也要按時完成任務。"},
+           {k:"B",t:"只要努力學習，才能取得好成績。"},
+           {k:"C",t:"他因為生病了，但是仍然來上班。"},
+           {k:"D",t:"無論天氣不好，我們都去郊遊。"}],
+  answer:"A",
+  analysis:{
+   A:"正確。『即使……也……』表假設讓步，搭配正確。",
+   B:"『只要……才……』搭配錯誤，應為『只要……就……』或『只有……才……』。",
+   C:"『因為……但是……』因果與轉折混用，應刪其一。",
+   D:"『無論』後接疑問／任指（如『無論天氣多壞』），『天氣不好』為確定陳述，應改『儘管天氣不好』。"}},
+
+ {id:30,year:2018,source:"2018年真題改編",type:4,prob:"中",
+  stem:"下列對原句的改寫，意思不變且正確的是：\n原句：由於經費不足，該計劃被迫擱置。",
+  options:[{k:"A",t:"該計劃因經費不足而被迫擱置。"},
+           {k:"B",t:"該計劃被迫擱置，因為經費充足。"},
+           {k:"C",t:"經費不足，所以該計劃沒有擱置。"},
+           {k:"D",t:"該計劃主動擱置，與經費無關。"}],
+  answer:"A",
+  analysis:{
+   A:"正確。將因果從句轉為『因……而……』被動結構，原意與邏輯不變。",
+   B:"『經費充足』與原句『不足』相反，意思改變。",
+   C:"『沒有擱置』與原句相反。",
+   D:"『主動擱置、與經費無關』均違原意。"}},
+
+ {id:31,year:2021,source:"2021年真題改編",type:4,prob:"中",
+  stem:"下列改寫與原句意思最相近的是：\n原句：他不但完成了任務，還超出了預期。",
+  options:[{k:"A",t:"他完成了任務，而且超出預期。"},
+           {k:"B",t:"他只完成了任務，沒有超出預期。"},
+           {k:"C",t:"他既沒完成任務，更沒超出預期。"},
+           {k:"D",t:"他完成任務，但低於預期。"}],
+  answer:"A",
+  analysis:{
+   A:"正確。『不但……還……』改為『……而且……』，遞進關係與原意一致。",
+   B:"『沒有超出』與原句相反。",
+   C:"全盤否定原句。",
+   D:"『低於預期』與『超出預期』相反。"}},
+
+ {id:32,year:2023,source:"2023年真題改編",type:4,prob:"中高",
+  stem:"下列句子語氣最得體（委婉客氣）的一項是：",
+  options:[{k:"A",t:"你必須馬上把文件交來。"},
+           {k:"B",t:"敬請於本周五前惠賜相關文件，俾便跟進。"},
+           {k:"C",t:"趕快交文件，別拖。"},
+           {k:"D",t:"不交文件，後果自負。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。『敬請……惠賜……俾便』為公文客氣用語，委婉得體。",
+   A:"命令式，生硬，不適於平行或對外行文。",
+   C:"口語催促，欠莊重。",
+   D:"帶威脅語氣，極不得體。"}},
+
+ {id:33,year:2026,source:"2026年預測題",type:4,prob:"中",
+  stem:"下列對原句的修飾，最能突出重點且不改原意的是：\n原句：政府推出了多項措施，這些措施改善了民生。",
+  options:[{k:"A",t:"政府推出的多項措施，改善了民生。"},
+           {k:"B",t:"民生被政府推出的多項措施改善了。"},
+           {k:"C",t:"政府推出了多項措施，但沒有改善民生。"},
+           {k:"D",t:"多項措施由政府在改善民生中推出。"}],
+  answer:"A",
+  analysis:{
+   A:"正確。將兩句合併為『主語（措施）＋謂語（改善）』，緊湊突出重點，原意不變。",
+   B:"被動句式生硬，焦點偏移。",
+   C:"『沒有改善』與原意相反。",
+   D:"『在改善民生中推出』語序拗口、邏輯含糊。"}},
+
+ /* ---- 中文公文常識與措辭 ---- */
+ {id:34,year:2013,source:"2013年真題改編",type:5,prob:"中高",
+  stem:"下列公文用語中，適用於「平行機關（同級部門）相互行文」的是：",
+  options:[{k:"A",t:"鈞鑒"},
+           {k:"B",t:"鈞長"},
+           {k:"C",t:"貴處／函達"},
+           {k:"D",t:"卑職"}],
+  answer:"C",
+  analysis:{
+   C:"正確。平行機關稱對方用『貴』（貴處、貴局），通知用『函達』，屬平行公文用語。",
+   A:"『鈞鑒』為上行文對上級的敬語（鈞：對尊長）。",
+   B:"『鈞長』為下對上稱長官，屬上行。",
+   D:"『卑職』為下級對上級自稱，屬上行。"}},
+
+ {id:35,year:2018,source:"2018年真題改編",type:5,prob:"中高",
+  stem:"下列公文文種，用於「向上級機關請求指示、批准」的是：",
+  options:[{k:"A",t:"請示"},
+           {k:"B",t:"函"},
+           {k:"C",t:"通告"},
+           {k:"D",t:"令"}],
+  answer:"A",
+  analysis:{
+   A:"正確。『請示』為上行文，用於向下級？不——用於向上級請求指示、批准。",
+   B:"『函』用於不相隸屬機關或平行機關間洽商。",
+   C:"『通告』為下行文，公布應遵守或周知事項。",
+   D:"『令』為下行文，發佈命令、任免等。"}},
+
+ {id:36,year:2020,source:"2020年真題改編",type:5,prob:"中",
+  stem:"撰寫「請示」時，結尾慣用語應為：",
+  options:[{k:"A",t:"此致敬禮"},
+           {k:"B",t:"妥否，請批示"},
+           {k:"C",t:"特此公告"},
+           {k:"D",t:"特此函復"}],
+  answer:"B",
+  analysis:{
+   B:"正確。上行文『請示』結尾用『妥否，請批示』『請示鈞核』等請示語。",
+   A:"『此致敬禮』多為一般書信結尾，非公文請示慣用。",
+   C:"『特此公告』為『通告』結尾（下行）。",
+   D:"『特此函復』為『函』的回覆結尾（平行）。"}},
+
+ {id:37,year:2022,source:"2022年真題改編",type:5,prob:"中",
+  stem:"下列敬語，用於「下級對上級自稱」的是：",
+  options:[{k:"A",t:"鄙人"},
+           {k:"B",t:"卑職"},
+           {k:"C",t:"貴公司"},
+           {k:"D",t:"台端"}],
+  answer:"B",
+  analysis:{
+   B:"正確。『卑職』為舊式公文下級對上級的自稱。",
+   A:"『鄙人』為一般自謙稱，不限上下級。",
+   C:"『貴公司』是稱呼對方（尊稱），非自稱。",
+   D:"『台端』是對對方的稱呼（尊稱），非自稱。"}},
+
+ {id:38,year:2024,source:"2024年真題改編",type:5,prob:"中高",
+  stem:"下列公文標題寫法正確的是：",
+  options:[{k:"A",t:"關於請示追加經費的報告"},
+           {k:"B",t:"某局關於開展員工培訓工作的通知"},
+           {k:"C",t:"關於舉辦運動會的通告"},
+           {k:"D",t:"某部加強安全管理決定"}],
+  answer:"B",
+  analysis:{
+   B:"正確。標題結構『機關＋關於＋事由＋文種（通知）』規範完整。",
+   A:"『請示』與『報告』混用為一文種，文種不清。",
+   C:"內部運動會一般發『通知』而非對外『通告』（通告用於應遵守／周知事項）。",
+   D:"缺『關於』及結構助詞『的』，標題結構不規範。"}},
+
+ {id:39,year:2025,source:"2025年真題改編",type:5,prob:"中",
+  stem:"下列用語，適用於「向下級機關發佈應遵守或周知事項」的是：",
+  options:[{k:"A",t:"特此函達"},
+           {k:"B",t:"此佈／特此通告"},
+           {k:"C",t:"請示鈞核"},
+           {k:"D",t:"台安"}],
+  answer:"B",
+  analysis:{
+   B:"正確。下行公布事項用『通告』，結尾『此佈』『特此通告』。",
+   A:"『函達』為平行機關通知用語。",
+   C:"『請示鈞核』為上行文請示語。",
+   D:"『台安』為書信結尾祝詞，非公文發佈用語。"}},
+
+ {id:40,year:2026,source:"2026年預測題",type:5,prob:"中",
+  stem:"以電郵向市民發佈公共服務通知，開頭稱呼與結尾最得體的是：",
+  options:[{k:"A",t:"親愛的市民朋友們：……此致"},
+           {k:"B",t:"尊敬的市民：……特此通知。"},
+           {k:"C",t:"喂，市民：……收到請回覆。"},
+           {k:"D",t:"市民們：……立即執行。"}],
+  answer:"B",
+  analysis:{
+   B:"正確。『尊敬的市民』莊重得體，『特此通知』為規範結尾。",
+   A:"『親愛的』過於口語私函化，『此致』偏書信，公文感不足。",
+   C:"『喂』『收到請回覆』隨便且不莊重。",
+   D:"『立即執行』命令口吻，對市民不當。"}},
+];
+
+/* ============ 狀態 / 存儲 ============ */
+const KEY="cre_wrong_v1", KEY_STAT="cre_stat_v1";
+function safeGet(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}}
+function safeSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+let wrongSet = new Set(safeGet(KEY)||[]);
+let stat = safeGet(KEY_STAT)||{done:0,right:0};
+function saveWrong(){safeSet(KEY,Array.from(wrongSet))}
+function saveStat(){safeSet(KEY_STAT,stat)}
+
+/* ============ 通用渲染 ============ */
+function probBadge(p){return `<span class="badge b-prob ${PROBCLS[p]||'p-mid'}">2026再考機率·${p}</span>`}
+function metaHTML(q){return `<span class="badge b-year">${q.source}</span><span class="badge b-type">${TYPES[q.type]}</span>${probBadge(q.prob)}`}
+function optsHTML(q,chosen,reveal,mode){
+  // mode: 'mock' | 'review' | 'view'；reveal 為 true 時不綁定點擊（已揭曉）
+  return q.options.map(o=>{
+    let cls="opt";
+    if(reveal){
+      cls+=" lock";
+      if(o.k===q.answer) cls+=" right";
+      else if(o.k===chosen) cls+=" wrong";
+    }
+    if(o.k===chosen) cls+=" chosen";
+    const fn = reveal ? '' : (mode==='review' ? `onclick="chooseReview('${o.k}')"` : `onclick="choose('${o.k}')"`);
+    return `<div class="${cls}" ${fn}><span class="k">${o.k}</span><span>${o.t.replace(/\n/g,'<br>')}</span></div>`;
+  }).join("");
+}
+function analysisHTML(q){
+  let rows="";
+  ["A","B","C","D"].forEach(k=>{
+    if(!q.analysis[k])return;
+    const isRight=(k===q.answer);
+    rows+=`<div class="row ${isRight?'r':'w'}"><b>${k}．</b>${q.analysis[k]}</div>`;
+  });
+  return `<div class="analysis"><h4>📖 詳細解析（正確答案：${q.answer}）</h4>${rows}</div>`;
+}
+
+/* ============ Column 切換 ============ */
+function switchCol(n){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',+t.dataset.col===n));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('col'+n).classList.add('active');
+  if(n===2) ensureMock();
+  if(n===3) startReview();
+}
+
+/* ============ Column 1 ============ */
+function fillSelectors(){
+  const ys=[...new Set(BANK.map(q=>q.year))].sort((a,b)=>a-b);
+  document.getElementById('yearSel').innerHTML='<option value="">全部年份</option>'+ys.map(y=>`<option value="${y}">${y}年${y===2026?'（預測）':''}</option>`).join('');
+  document.getElementById('typeSel').innerHTML='<option value="">全部題型</option>'+Object.entries(TYPES).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+}
+function dbCard(q){
+  return `<div class="card">
+    <div>${metaHTML(q)}</div>
+    <div class="stem">${q.stem.replace(/\n/g,'<br>')}</div>
+    ${q.passage?`<div class="passage">${q.passage.replace(/\n/g,'<br>')}</div>`:''}
+    <div class="opts">${optsHTML(q,null,true)}</div>
+    ${analysisHTML(q)}
+  </div>`;
+}
+function renderDB(list){
+  const box=document.getElementById('dbList');
+  document.getElementById('dbInfo').textContent=`共 ${list.length} 題`;
+  box.innerHTML = list.length? list.map(dbCard).join('') : '<div class="empty">沒有符合條件的題目。</div>';
+}
+function filterYear(y){renderDB(BANK.filter(q=>!y||q.year==+y))}
+function filterType(t){renderDB(BANK.filter(q=>!t||q.type==+t))}
+function resetFilter(){document.getElementById('yearSel').value="";document.getElementById('typeSel').value="";renderDB(BANK)}
+function runCommand(){
+  const v=document.getElementById('cmdInput').value.trim();
+  const m=v.match(/(?:歷年真題|历年真题|真题)\s*(\d{4})/);
+  if(m){
+    const y=+m[1];
+    const list=BANK.filter(q=>q.year===y);
+    if(list.length){switchCol(1);document.getElementById('yearSel').value=y;renderDB(list);
+      document.getElementById('dbInfo').textContent=`「${y}年」代表性考題共 ${list.length} 題`;}
+    else alert(`題庫中暫無 ${y} 年題目，可試 2012–2025 或 2026（預測）。`);
+  } else {
+    alert("指令格式：歷年真題 2021");
+  }
+}
+function buildOverview(){
+  const t=document.getElementById('overviewTbl');
+  t.innerHTML='<tr><th>編號</th><th>年份／來源</th><th>題型</th><th>2026重考機率</th><th>考點摘要</th></tr>'+
+    BANK.map(q=>`<tr><td>${q.id}</td><td>${q.source}</td><td>${TYPES[q.type]}</td><td>${q.prob}</td><td>${q.stem.replace(/\n/g,' ').slice(0,28)}…</td></tr>`).join('');
+}
+
+/* ============ Column 2 模擬 ============ */
+let mockIdx=0, mockAnswered=false;
+function ensureMock(){if(!document.getElementById('mockStem').textContent) nextMock();}
+function updateStat(){
+  document.getElementById('sDone').textContent=stat.done;
+  document.getElementById('sRight').textContent=stat.right;
+  document.getElementById('sRate').textContent=stat.done?(Math.round(stat.right/stat.done*100)+'%'):'—';
+  document.getElementById('sWrong').textContent=wrongSet.size;
+}
+function nextMock(){
+  mockAnswered=false;
+  const q=BANK[mockIdx% BANK.length];
+  document.getElementById('mockHead').innerHTML=metaHTML(q);
+  document.getElementById('mockStem').innerHTML=q.stem.replace(/\n/g,'<br>');
+  const pv=document.getElementById('mockPassage');
+  if(q.passage){pv.style.display='block';pv.innerHTML=q.passage.replace(/\n/g,'<br>')}else pv.style.display='none';
+  document.getElementById('mockOpts').innerHTML=optsHTML(q,null,false,'mock');
+  document.getElementById('mockFeedback').innerHTML='';
+  document.getElementById('nextBtn').style.display='none';
+  updateStat();
+}
+function choose(k){
+  if(mockAnswered)return;
+  mockAnswered=true;
+  const q=BANK[mockIdx% BANK.length];
+  const right=(k===q.answer);
+  stat.done++; if(right)stat.right++; saveStat();
+  if(!right){wrongSet.add(q.id);saveWrong();}
+  document.getElementById('mockOpts').innerHTML=optsHTML(q,k,true,'mock');
+  let fb=`<div class="feedback ${right?'fb-ok':'fb-bad'}"><b>${right?'✅ 答對！':'❌ 答錯'}</b>　正確答案：<b>${q.answer}</b></div>`;
+  fb+=analysisHTML(q);
+  if(!right){fb+=`<div class="sys">[系統提示] 本題已自動記入『Column 3：錯題重溫』。輸入「錯題重溫」或切換至 Column 3 可重新練習。</div>`;}
+  document.getElementById('mockFeedback').innerHTML=fb;
+  document.getElementById('nextBtn').style.display='inline-block';
+  updateStat();
+  mockIdx++;
+}
+
+/* ============ Column 3 錯題重溫 ============ */
+let reviewQueue=[], reviewPos=0, reviewAnswered=false;
+function startReview(){
+  reviewQueue=Array.from(wrongSet);
+  reviewPos=0; reviewAnswered=false;
+  const box=document.getElementById('reviewBox');
+  const tools=document.getElementById('reviewTools');
+  if(!reviewQueue.length){box.innerHTML='<div class="empty">🎉 目前沒有錯題！在 Column 2 作答答錯的題目會自動歸檔至此。</div>';tools.style.display='none';return;}
+  document.getElementById('reviewHint').textContent=`共 ${reviewQueue.length} 題待重溫。系統重新出題，不顯示過往答案，作答後進行二次對比解析。`;
+  tools.style.display='flex';
+  renderReview();
+}
+function renderReview(){
+  if(reviewPos>=reviewQueue.length){
+    document.getElementById('reviewBox').innerHTML='<div class="empty">✅ 錯題重溫完成！繼續在 Column 2 練習以累積更多題目。</div>';
+    document.getElementById('reviewTools').style.display='none';return;
+  }
+  const q=BANK.find(x=>x.id===reviewQueue[reviewPos]);
+  document.getElementById('reviewBox').innerHTML=
+    `<div class="card"><div class="qmeta">錯題重溫 ${reviewPos+1}/${reviewQueue.length} ｜ ${metaHTML(q)}</div>
+     <div class="stem">${q.stem.replace(/\n/g,'<br>')}</div>
+     ${q.passage?`<div class="passage">${q.passage.replace(/\n/g,'<br>')}</div>`:''}
+     <div class="opts" id="rvOpts">${optsHTML(q,null,false,'review')}</div>
+     <div id="rvFb"></div></div>`;
+}
+function chooseReview(k){
+  if(reviewAnswered)return; reviewAnswered=true;
+  const q=BANK.find(x=>x.id===reviewQueue[reviewPos]);
+  const right=(k===q.answer);
+  document.getElementById('rvOpts').innerHTML=optsHTML(q,k,true,'review');
+  let fb=`<div class="feedback ${right?'fb-ok':'fb-bad'}"><b>${right?'✅ 已修正！':'⚠️ 仍答錯'}</b>　正確答案：<b>${q.answer}</b></div>`+analysisHTML(q);
+  if(right){wrongSet.delete(q.id);saveWrong();fb+=`<div class="sys">[系統提示] 你已修正此思維陷阱，本題已從錯題本移除。</div>`;}
+  else{fb+=`<div class="sys">[系統提示] 思維陷阱仍未突破，本題繼續留在錯題本。</div>`;}
+  document.getElementById('rvFb').innerHTML=fb;
+}
+function nextReview(){reviewAnswered=false;reviewPos++;renderReview();}
+function clearWrong(){if(confirm('確定清空錯題本？')){wrongSet.clear();saveWrong();startReview();}}
+
+/* ============ 初始化 ============ */
+fillSelectors();renderDB(BANK);buildOverview();updateStat();
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>switchCol(+t.dataset.col));
+</script>
+</body>
+</html>
